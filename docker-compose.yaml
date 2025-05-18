@@ -4,13 +4,13 @@ services:
   ticket-assignment-service:
     image: ticket-assignment:dev
     container_name: ticket-assignment
-    build: ./server
+    build: ./call-center-server
     ports:
       - "8000:8000"
     tty: true
     command: uvicorn main:app --host 0.0.0.0 --reload
     volumes:
-      - ./server:/usr/src/app
+      - ./call-center-server:/usr/src/app
     environment:
       - ENV=development
     networks:
