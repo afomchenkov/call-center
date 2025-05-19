@@ -10,28 +10,27 @@ const HomePage = lazy(() => import('../pages/HomePage'));
 
 type WithSuspenseProps = {
   component: null | ReactNode;
-}
+};
 
+// eslint-disable-next-line react-refresh/only-export-components
 const WithSuspense = ({ component = null }: WithSuspenseProps) => {
   return <Suspense fallback={<PageLoader />}>{component}</Suspense>;
 };
 
-export const router = createBrowserRouter(
-  [
-    {
-      element: <App />,
-      loader: () => <PageLoader />,
-      children: [
-        {
-          path: '/',
-          index: true,
-          element: <WithSuspense component={<HomePage />} />,
-        },
-        {
-          path: '*',
-          element: <NotFoundPage />,
-        },
-      ],
-    },
-  ],
-);
+export const router = createBrowserRouter([
+  {
+    element: <App />,
+    loader: () => <PageLoader />,
+    children: [
+      {
+        path: '/',
+        index: true,
+        element: <WithSuspense component={<HomePage />} />,
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
+      },
+    ],
+  },
+]);

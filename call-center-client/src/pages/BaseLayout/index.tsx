@@ -20,14 +20,14 @@ export const BaseLayout = () => {
 
   return (
     <BaseLayoutStyled>
-      <header role='menu'>
+      <header role="menu">
         <Navigation />
       </header>
       <ErrorBoundary
         fallback={<div>Something went wrong.</div>}
         onError={consoleError}
       >
-        <main role='main'>
+        <main role="main">
           <Outlet />
         </main>
       </ErrorBoundary>
