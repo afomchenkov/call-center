@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, APIRouter, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from domain.task import Task
 from domain.ticket import Ticket
@@ -16,8 +16,20 @@ import uuid
 import queue
 import uvicorn
 
+"""
+TODO: Implement dynamic reassignment mechanism: Queued tasks (e.g. Korean call) should
+be immediately assigned if a matching agent is added or gains the necessary
+language skill. At the moment, this functionality is not available in the backend code.
+"""
+
 # FastAPI implementation
-app = FastAPI(title="Ticket Assignment Service")
+app = FastAPI(
+    title="Ticket Assignment Service",
+    version="1.0.0",
+    openapi_url="/api/v1/openapi.json",
+    docs_url="/api/v1/docs"
+)
+api_v1 = APIRouter(prefix="/api/v1")
 
 # Configure CORS
 app.add_middleware(
@@ -31,7 +43,7 @@ app.add_middleware(
 
 service = TicketAssignmentService()
 
-@app.get(
+@api_v1.get(
     "/health",
     tags=["healthcheck"],
     summary="Perform a Health Check",
@@ -43,7 +55,7 @@ def get_health() -> HealthCheck:
     return HealthCheck(status="OK")
 
 
-@app.post("/agents", status_code=status.HTTP_201_CREATED, response_model=AgentResponse)
+@api_v1.post("/agents", status_code=status.HTTP_201_CREATED, response_model=AgentResponse)
 def register_agent(agent_request: AgentRequest):
     agent = Agent(
         name=agent_request.name,
@@ -64,7 +76,7 @@ def register_agent(agent_request: AgentRequest):
         assigned_tasks=[]  # No tasks initially
     )
 
-@app.get("/agents/{agent_identifier}", response_model=AgentResponse)
+@api_v1.get("/agents/{agent_identifier}", response_model=AgentResponse)
 def get_agent(agent_identifier: str, by_name: bool = False):
     """Get agent by ID or name"""
     if by_name:
@@ -92,7 +104,7 @@ def get_agent(agent_identifier: str, by_name: bool = False):
         ]
     )
 
-@app.post("/tickets/assign", response_model=AssignmentResponse)
+@api_v1.post("/tickets/assign", response_model=AssignmentResponse)
 def assign_ticket(ticket_request: TicketRequest):
     # If ID is not provided or empty, generate a UUID
     ticket_id = ticket_request.id if ticket_request.id else str(uuid.uuid4())
@@ -202,7 +214,7 @@ def assign_ticket(ticket_request: TicketRequest):
             queued=True
         )
 
-@app.post("/tasks/complete", status_code=status.HTTP_200_OK)
+@api_v1.post("/tasks/complete", status_code=status.HTTP_200_OK)
 def complete_task(agent_identifier: str, task_id: str, by_name: bool = False):
     """Mark a task as complete"""
     if by_name:
@@ -228,7 +240,7 @@ def complete_task(agent_identifier: str, task_id: str, by_name: bool = False):
         )
     return {"message": "Task marked as complete"}
 
-@app.get("/agents", response_model=List[AgentResponse])
+@api_v1.get("/agents", response_model=List[AgentResponse])
 def list_agents():
     return [
         AgentResponse(
@@ -243,7 +255,7 @@ def list_agents():
         for agent in service.agents.values()
     ]
 
-@app.get("/queue", response_model=QueueStatusResponse)
+@api_v1.get("/queue", response_model=QueueStatusResponse)
 def get_queue_status():
     """Get the current status of the ticket queues"""
     # Helper function to extract tickets from a priority queue
@@ -283,7 +295,7 @@ def get_queue_status():
     )
 
 # Add a debug endpoint to see the current state
-@app.get("/debug")
+@api_v1.get("/debug")
 def get_debug_info():
     """Get internal state for debugging"""
     return {
@@ -304,7 +316,7 @@ def get_debug_info():
     }
 
 # Add a reset endpoint for testing
-@app.post("/reset")
+@api_v1.post("/reset")
 def reset_service():
     """Reset the service state (for testing)"""
     service.agents = {}
@@ -314,7 +326,7 @@ def reset_service():
     service.ticket_to_task_map = {}
     return {"message": "Service state reset successfully"}
 
-@app.patch("/agents/{agent_identifier}", response_model=AgentResponse)
+@api_v1.patch("/agents/{agent_identifier}", response_model=AgentResponse)
 def update_agent(agent_identifier: str, update_request: AgentUpdateRequest, by_name: bool = False):
     """Update an existing agent's properties"""
     if by_name:
@@ -409,7 +421,7 @@ def solve_example_case():
         return "Ticket queued for later assignment"
 
 # Add a helper endpoint for testing to manually assign tasks to agents
-@app.post("/agents/{agent_identifier}/tasks", response_model=AgentResponse)
+@api_v1.post("/agents/{agent_identifier}/tasks", response_model=AgentResponse)
 def assign_manual_task(
     agent_identifier: str, 
     platform: str, 
@@ -469,6 +481,8 @@ def assign_manual_task(
             for task in agent.assigned_tasks
         ]
     )
+
+app.include_router(api_v1)
 
 if __name__ == "__main__":
     # Run the HTTP server
