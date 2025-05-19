@@ -1,4 +1,7 @@
-from typing import List, Optional, Dict, Any, Set
+from typing import List, Optional
+from domain.task import TaskPlatform
+import uuid
+import time
 
 class Ticket:
     def __init__(self, id: Optional[str] = None, restrictions: List[str] = None, platform: str = None):

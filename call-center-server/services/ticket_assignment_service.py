@@ -1,5 +1,5 @@
-from typing import List, Optional, Dict, Any, Set
-from domain.task import TaskType, TaskPlatform, Task
+from typing import List, Optional, Dict, Set
+from domain.task import Task
 from domain.ticket import Ticket
 from domain.agent import Agent
 from domain.ticket_assignment import TicketAssignment

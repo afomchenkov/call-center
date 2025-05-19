@@ -1,5 +1,4 @@
-from typing import List, Optional, Dict, Any, Set
-from domain.task import Task
+from typing import Optional
 from domain.ticket import Ticket
 import queue
 

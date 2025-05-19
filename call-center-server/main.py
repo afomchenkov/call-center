@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from domain.task import TaskType, TaskPlatform, Task
+from domain.task import Task
 from domain.ticket import Ticket
 from domain.agent import Agent
 from services.ticket_assignment_service import TicketAssignmentService
@@ -11,6 +11,7 @@ from models.agent import AgentResponse, AgentRequest, AgentUpdateRequest
 from models.assignment import AssignmentResponse
 from models.ticket import TicketRequest
 from models.queue import QueueStatusResponse
+import uuid
 import uvicorn
 
 # FastAPI implementation

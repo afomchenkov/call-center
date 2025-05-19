@@ -1,5 +1,7 @@
-from typing import List, Optional, Dict, Any, Set
+from typing import List, Optional
 from domain.ticket import Ticket
+from domain.task import Task
+import uuid
 
 class Agent:
     def __init__(self, name: str, language_skills: List[str], id: Optional[str] = None):
