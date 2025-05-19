@@ -9,9 +9,11 @@ from utils.ticket_queue import TicketQueue
 from models.health import HealthCheck
 from models.agent import AgentResponse, AgentRequest, AgentUpdateRequest
 from models.assignment import AssignmentResponse
-from models.ticket import TicketRequest
+from models.ticket import TicketRequest, QueuedTicketResponse
 from models.queue import QueueStatusResponse
+from models.task import TaskResponse
 import uuid
+import queue
 import uvicorn
 
 # FastAPI implementation
