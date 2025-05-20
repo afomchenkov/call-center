@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
@@ -18,7 +17,6 @@ import {
 } from '@heroicons/react/24/outline';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Navigation } from '@/components/Navigation';
-import { AssignTicketDialog } from '@/components/AssignTicketDialog';
 import { useLog, useThemeSwitch } from '@/hooks';
 
 function SwitchTranslation() {
@@ -61,20 +59,9 @@ function SwitchThemeButton() {
 }
 
 function Sidebar(): ReactNode {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-
   return (
     <div className="flex flex-col h-full">
       <Navigation />
-      <Button
-        className="mt-auto w-full cursor-pointer"
-        variant="secondary"
-        onClick={() => setOpen(true)}
-      >
-        {t('assignTicket')}
-      </Button>
-      <AssignTicketDialog open={open} onOpenChange={setOpen} />
     </div>
   );
 }
