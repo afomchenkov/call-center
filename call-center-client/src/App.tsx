@@ -1,11 +1,17 @@
+import type { ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { BaseLayout } from './pages/BaseLayout';
 import { AppProvider } from './state/appProvider';
 
-export const App = () => {
+const queryClient = new QueryClient();
 
+export function App(): ReactNode {
   return (
-    <AppProvider>
-      <BaseLayout />
-    </AppProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppProvider>
+        <BaseLayout />
+      </AppProvider>
+    </QueryClientProvider>
   );
 }
