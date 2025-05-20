@@ -8,11 +8,19 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import { agentSchema } from '@/schemas/agentSchema';
 import type { AgentFormValues } from '@/schemas/agentSchema';
+import { LANGUAGES } from '@/constants';
 
 type RegisterAgentDialogProps = {
   open: boolean;
@@ -29,6 +37,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<AgentFormValues>({
     resolver: zodResolver(agentSchema),
@@ -50,7 +59,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent aria-describedby={'Register new agent'}>
+      <DialogContent aria-describedby="Register new agent">
         <DialogHeader>
           <DialogTitle>{t('registerAgent.addNewAgent')}</DialogTitle>
         </DialogHeader>
@@ -66,22 +75,42 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
 
           <div className="space-y-2">
             <Label>{t('registerAgent.languageSkills')}</Label>
-            {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-2">
-                <Input
-                  {...register(`language_skills.${index}`)}
-                  placeholder="e.g. English"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => remove(index)}
-                  className="px-2 cursor-pointer"
-                >
-                  ✕
-                </Button>
-              </div>
-            ))}
+            {fields.map((field, index) => {
+              const { id, value } = field as never;
+              return (
+                <div key={id} className="flex gap-2 items-center">
+                  <Select
+                    value={value}
+                    onValueChange={(val) =>
+                      setValue(`language_skills.${index}`, val)
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {LANGUAGES.map((lang) => (
+                        <SelectItem
+                          className="cursor-pointer hover:bg-gray-100"
+                          key={lang}
+                          value={lang}
+                        >
+                          {lang}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => remove(index)}
+                    className="px-2 cursor-pointer"
+                  >
+                    ✕
+                  </Button>
+                </div>
+              );
+            })}
 
             {errors.language_skills && (
               <p className="text-sm text-red-500 mt-2">
@@ -95,13 +124,21 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
               onClick={() => append('')}
               className="mt-1 cursor-pointer"
             >
-              {t('registerAgent.addLanguage')}
+              + {t('registerAgent.addLanguage')}
             </Button>
           </div>
 
           <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => onOpenChange(false)}
+            >
+              {t('common.cancel')}
+            </Button>
             <Button type="submit" className="cursor-pointer">
-              {t('registerAgent.save')}
+              {t('registerAgent.register')}
             </Button>
           </DialogFooter>
         </form>
