@@ -248,7 +248,7 @@ def list_agents():
             name=agent.name,
             language_skills=agent.language_skills,
             assigned_tasks=[
-                TaskResponse(id=task.id, platform=task.platform, is_voice=task.is_voice)
+                TaskResponse(id=task.id, platform=task.platform)
                 for task in agent.assigned_tasks
             ]
         )
