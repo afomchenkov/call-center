@@ -5,12 +5,13 @@
 This project is a smart ticket assignment system for a call center. The backend has already been implemented and exposes a RESTful API, you can find the backend code attached in the email. Your task is to build the **frontend application** that interacts with this backend and provides a clean, intuitive UI for agents and operations.
 
 You'll build a dashboard that allows users to view:
+
 - System status (active calls, messages, completed tasks)
 - Current tasks
 - Agent overall workloads
 - Active agents and their current task distribution
 
-A sample UI wireframe is provided below for reference and inspiration. 
+A sample UI wireframe is provided below for reference and inspiration.
 
 ---
 
@@ -21,6 +22,7 @@ Build a frontend application that implements the following functionality:
 ### Core Functionality
 
 1. **Dashboard View**
+
    - Displays:
      - Number of active calls, messages, and completed tasks
      - Total tickets in queue
@@ -28,16 +30,19 @@ Build a frontend application that implements the following functionality:
      - hint: check the debug endpoint
 
 2. **Tasks View**
+
    - Segregate task list by type: voice and text
    - Display empty state if no tasks are in queue
    - Allow the user to create a task from the view
 
 3. **Agent View**
+
    - Display each agent’s current task load and capacity usage
    - Show voice call/task indicators and capacity bar
    - Allow the user to create new agents and assign/edit agent's skills
 
 4. **(Dashboard) Active Agents Section**
+
    - Show agent name, number of supported languages, and task capacity
    - View agent task status (calls and messages count)
 
@@ -46,7 +51,7 @@ Build a frontend application that implements the following functionality:
    - Assign ticket (calls `POST /tickets/assign`)
    - Complete task (calls `POST /tasks/complete`)
    - Register new agent (calls `POST /agents`)
-   
+
 ---
 
 ## API Endpoints Summary
@@ -73,7 +78,7 @@ You will be able to access the API documentation via: `http://localhost:8000/doc
 - **End-to-End Tests** using Playwright or Cypress that simulate the full user flow
 - Component library usage (e.g., Radix UI, ShadCN) for quick and accessible UI
 - Type-safe API calls
-- Implement dynamic reassignment: Ensure queued tasks (e.g. a Korean call) are immediately assigned when an agent gains the required language skill or a new      matching agent is added.
+- Implement dynamic reassignment: Ensure queued tasks (e.g. a Korean call) are immediately assigned when an agent gains the required language skill or a new matching agent is added.
 
 ---
 

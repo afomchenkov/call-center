@@ -1,7 +1,3 @@
-
-
-
-
 # Call Center Ticket Assignment System
 
 ## Overview
@@ -18,22 +14,26 @@ This project implements an HTTP server that handles the assignment of customer r
 ## Business Rules and Constraints
 
 ### Agent Capacity
+
 - An agent cannot handle 2 voice calls simultaneously
 - An agent can handle a maximum of 4 text-based tasks at once
 - If an agent has a voice call, they can handle a maximum of 3 tasks total
 
 ### Queue Management
+
 - Tickets that cannot be immediately assigned are placed in a queue
 - Voice calls have higher priority than text-based tasks
 - The system attempts to assign queued tickets when agents become available
 
 ### Language Considerations
+
 - Tickets have language requirements that must be matched with agent skills
 - Agents can have multiple language skills
 
 ## API Endpoints
 
 ### Agent Management
+
 - `POST /agents`: Register a new agent with language skills
 - `GET /agents`: List all registered agents
 - `GET /agents/{agent_identifier}`: Get details for a specific agent
@@ -41,10 +41,12 @@ This project implements an HTTP server that handles the assignment of customer r
 - `POST /agents/{agent_identifier}/tasks`: Manually assign a task to an agent (for testing)
 
 ### Ticket Assignment
+
 - `POST /tickets/assign`: Assign a ticket to an available agent
 - `POST /tasks/complete`: Mark a task as complete
 
 ### System Status
+
 - `GET /queue`: View the current ticket queue status
 - `GET /debug`: Get internal system state for debugging
 - `POST /reset`: Reset the system state (for testing)
@@ -52,17 +54,20 @@ This project implements an HTTP server that handles the assignment of customer r
 ## Data Models
 
 ### Agent
+
 - Unique ID (UUID)
 - Name
 - Language skills
 - Currently assigned tasks
 
 ### Ticket
+
 - Unique ID (UUID)
 - Language restrictions
 - Platform (call, email, facebook_chat, website_chat)
 
 ### Task
+
 - Unique ID (UUID)
 - Platform
 - Associated with a specific ticket and agent
@@ -70,6 +75,7 @@ This project implements an HTTP server that handles the assignment of customer r
 ## Example Usage
 
 ### Register an Agent
+
 ```bash
 curl -X 'POST' \
   'http://localhost:8000/agents' \
@@ -81,6 +87,7 @@ curl -X 'POST' \
 ```
 
 ### Assign a Ticket
+
 ```bash
 curl -X 'POST' \
   'http://localhost:8000/tickets/assign' \
@@ -92,6 +99,7 @@ curl -X 'POST' \
 ```
 
 ### Complete a Task
+
 ```bash
 curl -X 'POST' \
   'http://localhost:8000/tasks/complete?agent_identifier=<agent_id>&task_id=<task_id>'
@@ -105,4 +113,4 @@ curl -X 'POST' \
 
 ## Swagger UI
 
- You can also use the Swagger UI at `/docs` to interactively test all endpoints.
+You can also use the Swagger UI at `/docs` to interactively test all endpoints.
