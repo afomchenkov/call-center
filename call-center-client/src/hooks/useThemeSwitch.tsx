@@ -6,7 +6,6 @@ const THEME_KEY = 'call_center_main:theme';
 type UseThemeSwitch = () => [activeTheme: string, setTheme: Dispatch<string>];
 
 export const useThemeSwitch: UseThemeSwitch = () => {
-  // TODO: fix it
   const [theme, setTheme] = useState(localStorage.theme || 'light');
   const activeTheme = theme === 'dark' ? 'light' : 'dark';
 

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { API_AGENTS } from '@/api';
-import type { RegisterAgentDto } from '@/models/agent';
+import type { RegisterAgentDto } from '@/models';
 
 export const useCreateAgent = () => {
   return useMutation({
