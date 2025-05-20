@@ -51,6 +51,16 @@ export class QueueItemModel extends BaseModel {
     );
   }
 
+  static withType(item: QueueItemModel, type: 'text' | 'voice') {
+    const copy = Object.assign(
+      Object.create(Object.getPrototypeOf(item)),
+      item
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (copy as any).type = type;
+    return copy;
+  }
+
   toDto() {
     return {
       priority: this.priority,
