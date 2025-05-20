@@ -7,8 +7,6 @@ type AppProviderProps = {
 };
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-
-
   const appState = useMemo(() => {
     return {
       ...defaultAppState,

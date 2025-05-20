@@ -1,9 +1,11 @@
 import { createContext, useContext } from 'react';
-import { Noop } from '../utils';
+import { Noop } from '@/utils';
 
+// TODO: add state management lib and move local states 
 export type AppState = {
   isLoading: boolean;
   error: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   addToQueue: Function;
 };
 
