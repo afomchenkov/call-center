@@ -38,7 +38,7 @@ i18n
             title: 'Agent Workload',
             noAgents: 'No agents available...',
             languages: 'Languages',
-            tasks: 'Tasks'
+            tasks: 'Tasks',
           },
           activeAgents: {
             title: 'Active Agents',
@@ -50,15 +50,26 @@ i18n
           },
           agents: 'Agents',
           resetSystem: 'Reset System',
-          assignTicket: 'Assign Ticket',
+          assignTicket: {
+            title: 'Assign Ticket',
+            description: 'Submit a new ticket to auto-assign or set in queue',
+            addLanguage: 'Add language',
+            restrictions: 'Language Restrictions',
+            platform: 'Platform',
+          },
+          common: {
+            cancel: 'Cancel',
+            submit: 'Submit',
+          },
           callCenter: 'Call Center System',
           registerAgent: {
             addNewAgent: 'Add New Agent',
             name: 'Name',
             languageSkills: 'Language Skills',
             addLanguage: 'Add Language',
-            save: 'Save'
-          }
+            save: 'Save',
+            register: 'Register',
+          },
         },
       },
       de: {
@@ -87,7 +98,7 @@ i18n
             title: 'Agentenarbeitslast',
             noAgents: 'Keine Agenten verfügbar...',
             languages: 'Sprachen',
-            tasks: 'Tasks'
+            tasks: 'Tasks',
           },
           activeAgents: {
             title: 'Wirkstoffe',
@@ -99,15 +110,27 @@ i18n
           },
           agents: 'Agenten(innen)',
           resetSystem: 'System zurücksetzen',
-          assignTicket: 'Ticket zuweisen',
+          assignTicket: {
+            title: 'Ticket zuweisen',
+            description:
+              'Senden Sie ein neues Ticket zur automatischen Zuweisung oder zum Einstellen in die Warteschlange',
+            addLanguage: 'Sprache hinzufügen',
+            restrictions: 'Sprachbeschränkungen',
+            platform: 'Plattform',
+          },
+          common: {
+            cancel: 'Stornieren',
+            submit: 'Einreichen',
+          },
           callCenter: 'Callcenter-System',
           registerAgent: {
             addNewAgent: 'Neuen Agenten hinzufügen',
             name: 'Name',
             languageSkills: 'Sprachkenntnisse',
             addLanguage: 'Sprache hinzufügen',
-            save: 'Speichern'
-          }
+            save: 'Speichern',
+            register: 'Registrieren',
+          },
         },
       },
     },
