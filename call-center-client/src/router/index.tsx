@@ -3,10 +3,11 @@ import type { ReactNode } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import { App } from '../App';
-import { NotFoundPage } from '../pages/NotFoundPage';
-import { PageLoader } from '../components/PageLoader';
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { PageLoader } from '@/components/PageLoader';
 
-const HomePage = lazy(() => import('../pages/HomePage'));
+const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
+const AgentsPage = lazy(() => import('@/pages/AgentsPage'));
 
 type WithSuspenseProps = {
   component: null | ReactNode;
@@ -25,7 +26,12 @@ export const router = createBrowserRouter([
       {
         path: '/',
         index: true,
-        element: <WithSuspense component={<HomePage />} />,
+        element: <WithSuspense component={<DashboardPage />} />,
+      },
+      {
+        path: '/agents',
+        index: true,
+        element: <WithSuspense component={<AgentsPage />} />,
       },
       {
         path: '*',
