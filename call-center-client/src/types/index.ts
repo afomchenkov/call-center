@@ -1,4 +1,5 @@
 import type { ReactNode, ReactElement } from 'react';
+import { QueueItemModel } from '@/models';
 
 type Year = `${number}${number}${number}${number}`;
 type Month = `${number}${number}`;
@@ -22,3 +23,7 @@ export enum TaskPlatform {
   FACEBOOK_CHAT = 'facebook_chat',
   WEBSITE_CHAT = 'website_chat',
 }
+
+export type QueuedTicket = QueueItemModel & {
+  type: 'voice' | 'text';
+};
