@@ -23,6 +23,7 @@ type DashboardViewParams = {
   activeMessages: number;
   completedTasks: number;
   queuedTickets: QueuedTicket[];
+  onSystemResetClick: () => void;
 };
 
 function StatusCard({
@@ -46,10 +47,9 @@ export function DashboardView(params: DashboardViewParams): ReactNode {
     activeMessages = 0,
     completedTasks = 0,
     queuedTickets = [],
+    onSystemResetClick = () => {}
   } = params;
   const { t } = useTranslation();
-
-  const handleResetSystemClick = () => {};
 
   return (
     <section>
@@ -62,7 +62,7 @@ export function DashboardView(params: DashboardViewParams): ReactNode {
         <Button
           variant="outline"
           className="cursor-pointer"
-          onClick={handleResetSystemClick}
+          onClick={onSystemResetClick}
         >
           {t('resetSystem')} <ReceiptRefundIcon />
         </Button>

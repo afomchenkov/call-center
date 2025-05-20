@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { CircleStackIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/button';
 import { RegisterAgentDialog } from '@/components/RegisterAgentDialog';
-import type { RegisterAgentDto } from '@/models/agent';
+import type { RegisterAgentDto } from '@/models';
 
 /**
  * - Display each agent’s current task load and capacity usage

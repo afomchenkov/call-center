@@ -2,7 +2,15 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { QueueListIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { QueueListIcon } from '@heroicons/react/24/outline';
+import type { QueuedTicket } from '@/types';
+import {
+  snakeToTitleCase,
+  formatQueueTicketDate,
+  parseLanguageRestrictions,
+} from '@/utils';
+import { AssignTicketDialog } from '@/components/AssignTicketDialog';
+import type { AssignTicketDto } from '@/models';
 
 /**
  * - Segregate task list by type: voice and text
@@ -10,22 +18,26 @@ import { QueueListIcon, PlusIcon } from '@heroicons/react/24/outline';
  * - Allow the user to create a task from the view
  */
 
-type QueuedTicket = {
-  id: string;
-  type: 'voice' | 'text';
-  platform: string;
-};
-
 type TasksViewProps = {
   tickets: QueuedTicket[];
+  onAssignNewTicket: (data: AssignTicketDto) => void;
 };
 
-export function TicketsView({ tickets = [] }: TasksViewProps): ReactNode {
+export function TicketsView(props: TasksViewProps): ReactNode {
+  const { tickets = [], onAssignNewTicket } = props;
+  const { t } = useTranslation();
+  const [isAssignTicketDialogOpen, setIsAssignTicketDialogOpen] =
+    useState(false);
   const [filter, setFilter] = useState<'all' | 'voice' | 'text'>('all');
 
   const filtered = tickets.filter((t) => filter === 'all' || t.type === filter);
 
-  const { t } = useTranslation();
+  const handleAssignTicketSubmit = (assignTicketData: AssignTicketDto) => {
+    if (onAssignNewTicket) {
+      onAssignNewTicket(assignTicketData);
+    }
+    setIsAssignTicketDialogOpen(false);
+  };
 
   return (
     <section className="space-y-4">
@@ -63,9 +75,18 @@ export function TicketsView({ tickets = [] }: TasksViewProps): ReactNode {
         </Button>
 
         <div className="ml-auto">
-          <Button variant="outline" size="icon" className="cursor-pointer">
-            <PlusIcon />
+          <Button
+            className="mt-auto w-full cursor-pointer"
+            variant="secondary"
+            onClick={() => setIsAssignTicketDialogOpen(true)}
+          >
+            {t('assignTicket.title')}
           </Button>
+          <AssignTicketDialog
+            open={isAssignTicketDialogOpen}
+            onOpenChange={setIsAssignTicketDialogOpen}
+            onFormSubmit={handleAssignTicketSubmit}
+          />
         </div>
       </div>
 
@@ -77,9 +98,24 @@ export function TicketsView({ tickets = [] }: TasksViewProps): ReactNode {
             </p>
           ) : (
             filtered.map((ticket) => (
-              <li key={ticket.id} className="py-2 px-4 flex justify-between">
-                <span className="font-medium">{ticket.id}</span>
-                <span className="text-sm text-gray-600">{ticket.platform}</span>
+              <li
+                key={ticket.ticketId}
+                className="py-2 px-4 flex justify-between hover:bg-gray-100"
+              >
+                <span className="font-medium">{ticket.ticketId.slice(-8)}</span>
+                <div>
+                  <span className="text-sm text-gray-600 mr-2">
+                    {`[${parseLanguageRestrictions(ticket.restrictions)}]`}
+                  </span>
+                  <span>|</span>
+                  <span className="text-sm text-gray-600 mr-2 ml-2">
+                    {snakeToTitleCase(ticket.platform)}
+                  </span>
+                  <span>|</span>
+                  <span className="text-sm text-gray-600 ml-2">
+                    {formatQueueTicketDate(ticket.createdAt)}
+                  </span>
+                </div>
               </li>
             ))
           )}

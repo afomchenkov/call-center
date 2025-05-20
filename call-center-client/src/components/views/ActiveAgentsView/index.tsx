@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserIcon } from '@heroicons/react/24/solid';
-// import { Button } from '@/components/ui/button';
 import {
   ChatBubbleOvalLeftIcon,
   PhoneIcon,
@@ -57,9 +56,9 @@ export function ActiveAgentsView(props: ActiveAgentsViewProps): ReactNode {
               </div>
 
               <div className="text-right flex items-center justify-between text-sm">
-                <div className="flex-1 text-center mr-2">
+                {/* <div className="flex-1 text-center mr-2">
                   {t('activeAgents.capacity')}: {agent.taskCapacity}
-                </div>
+                </div> */}
 
                 <div className="flex items-center gap-1 mr-2">
                   <PhoneIcon className="w-4 h-4" />

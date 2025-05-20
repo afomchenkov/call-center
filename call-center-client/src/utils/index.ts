@@ -1,22 +1,32 @@
-import {
-  format,
-  parseISO,
-} from 'date-fns';
+import { format, fromUnixTime } from 'date-fns';
+import { LANGUAGE_CODES, DATE_FORMAT_1 } from '@/constants';
 
+/**
+ * Convert Unix timestamp to formatted date
+ * @param timestamp
+ * @returns
+ */
+export const formatQueueTicketDate = (timestamp: number): string => {
+  const date = fromUnixTime(timestamp);
+  const formatted = format(date, DATE_FORMAT_1);
 
-export const formatEventDate = (start: string, end: string) => {
-  const startDate = parseISO(start);
-  const endDate = parseISO(end);
+  return formatted;
+};
 
-  const formattedDate = format(startDate, "EEE do MMM, HH:mm");
-  const formattedTimeRange = `${format(startDate, "HH:mm")} - ${format(
-    endDate,
-    "HH:mm"
-  )}`;
-
-  return `${formattedDate} - ${format(endDate, "HH:mm")}`;
+export const parseLanguageRestrictions = (restrictions: string[]) => {
+  return restrictions
+    .map((lang) => LANGUAGE_CODES[lang])
+    .filter(Boolean)
+    .join(',');
 };
 
 export const parseDateString = (date: string) => new Date(date).toUTCString();
 
-export const Noop = () => { };
+export const snakeToTitleCase = (str: string): string => {
+  return str
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+export const Noop = () => {};
