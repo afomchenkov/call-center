@@ -8,14 +8,14 @@ const PageLoaderWrapper = styled.div`
   justify-content: center;
 `;
 
-export const PageLoader = () => {
+export function PageLoader() {
   return (
     <PageLoaderWrapper>
       <SpinnerCircular
-        color='#0f62fe'
-        secondaryColor='#f4f4f4'
+        color="#0f62fe"
+        secondaryColor="#f4f4f4"
         thickness={130}
       />
     </PageLoaderWrapper>
   );
-};
+}
