@@ -40,7 +40,7 @@ export function TicketsView(props: TasksViewProps): ReactNode {
   };
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 overflow-auto">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">{t('ticketsQueue.title')}</h2>
@@ -102,7 +102,7 @@ export function TicketsView(props: TasksViewProps): ReactNode {
                 key={ticket.ticketId}
                 className="py-2 px-4 flex justify-between hover:bg-gray-100"
               >
-                <span className="font-medium">{ticket.ticketId.slice(-8)}</span>
+                <span className="font-medium mr-2">{ticket.ticketId.slice(-8)}</span>
                 <div>
                   <span className="text-sm text-gray-600 mr-2">
                     {`[${parseLanguageRestrictions(ticket.restrictions)}]`}

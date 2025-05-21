@@ -50,15 +50,16 @@ export function ActiveAgentsView(props: ActiveAgentsViewProps): ReactNode {
                 <div>
                   <p className="font-medium">{agent.name}</p>
                   <p className="text-sm text-gray-500">
-                    {t('activeAgents.languages')}: {agent.languageSkills.length}
+                    {t('activeAgents.languages')}:{' '}
+                    {`${agent.languageSkills.join('|')}`}
                   </p>
                 </div>
               </div>
 
               <div className="text-right flex items-center justify-between text-sm">
-                {/* <div className="flex-1 text-center mr-2">
+                <span className={`flex-1 font-medium mr-4 ${agent.taskCapacity === 0 ? 'text-red-400' : 'text-green-500'}`}>
                   {t('activeAgents.capacity')}: {agent.taskCapacity}
-                </div> */}
+                </span>
 
                 <div className="flex items-center gap-1 mr-2">
                   <PhoneIcon className="w-4 h-4" />

@@ -2,8 +2,6 @@ import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Progress } from '@/components/ui/progress';
-
-// import { Button } from '@/components/ui/button';
 import { CircleStackIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/button';
 import { RegisterAgentDialog } from '@/components/RegisterAgentDialog';
@@ -19,8 +17,8 @@ type Agent = {
   id: string;
   name: string;
   languageSkills: string[];
-  completedTasks: number;
-  totalTasks: number;
+  activeTasks: number;
+  totalCapacity: number;
 };
 
 type AgentWorkloadViewProps = {
@@ -73,9 +71,8 @@ export function AgentWorkloadView(props: AgentWorkloadViewProps): ReactNode {
         <div className="max-h-80 overflow-y-auto pr-1">
           <ul className="space-y-4">
             {agents.map((agent) => {
-              const progress =
-                agent.totalTasks > 0
-                  ? (agent.completedTasks / agent.totalTasks) * 100
+              const progress = agent.totalCapacity > 0
+                  ? (agent.activeTasks / agent.totalCapacity) * 100
                   : 0;
 
               return (
@@ -92,7 +89,7 @@ export function AgentWorkloadView(props: AgentWorkloadViewProps): ReactNode {
                       </p>
                     </div>
                     <span className="text-sm text-gray-600">
-                      {agent.completedTasks}/{agent.totalTasks}{' '}
+                      {agent.activeTasks}/{agent.totalCapacity}{' '}
                       {t('agentWorkload.tasks')}
                     </span>
                   </div>

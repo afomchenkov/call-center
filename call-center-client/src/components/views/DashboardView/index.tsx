@@ -13,16 +13,11 @@ import {
  *    - Agent workload and task distribution
  */
 
-type QueuedTicket = {
-  id: string;
-  platform: string;
-};
-
 type DashboardViewParams = {
   activeCalls: number;
   activeMessages: number;
   completedTasks: number;
-  queuedTickets: QueuedTicket[];
+  queuedTickets: number;
   onSystemResetClick: () => void;
 };
 
@@ -47,7 +42,7 @@ export function DashboardView(params: DashboardViewParams): ReactNode {
     activeMessages = 0,
     completedTasks = 0,
     queuedTickets = [],
-    onSystemResetClick = () => {}
+    onSystemResetClick = () => {},
   } = params;
   const { t } = useTranslation();
 
@@ -78,17 +73,12 @@ export function DashboardView(params: DashboardViewParams): ReactNode {
         <h3 className="text-lg font-medium mb-2">
           {t('system.queuedTickets')}
         </h3>
-        {queuedTickets.length === 0 ? (
+        {queuedTickets === 0 ? (
           <p className="text-gray-500 text-sm">{t('system.noQueuedTickets')}</p>
         ) : (
-          <ul className="divide-y divide-gray-200">
-            {queuedTickets.map((ticket) => (
-              <li key={ticket.id} className="py-2 flex justify-between">
-                <span className="font-medium">{ticket.id}</span>
-                <span className="text-gray-600 text-sm">{ticket.platform}</span>
-              </li>
-            ))}
-          </ul>
+          <p className="divide-y divide-gray-200">
+            {`${t('common.numberOfQueuedTickets')}: ${queuedTickets}`}
+          </p>
         )}
       </div>
     </section>

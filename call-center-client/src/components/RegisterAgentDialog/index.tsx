@@ -2,6 +2,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogDescription,
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
@@ -59,9 +60,10 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent aria-describedby="Register new agent">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('registerAgent.addNewAgent')}</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

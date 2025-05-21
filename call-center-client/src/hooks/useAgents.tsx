@@ -16,6 +16,6 @@ export const useAgents = () => {
       const data: AgentDto[] = await res.json();
       return data.map(AgentModel.fromDto);
     },
-    // refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 5000,
   });
 };

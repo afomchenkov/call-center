@@ -7,3 +7,5 @@ export { useCreateAgent } from './useCreateAgent';
 export { useResetSystem } from './useResetSystem';
 export { useQueueStatus } from './useQueueStatus';
 export { useTaskAssign } from './useTaskAssign';
+export { useTaskComplete } from './useTaskComplete';
+export { useCompletedTasks } from './useCompletedTasks';

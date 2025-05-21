@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -46,9 +47,19 @@ export function AssignTicketDialog({
     defaultValues: {
       platform: TaskPlatform.WEBSITE_CHAT,
       restrictions: [''],
-      id: crypto.randomUUID(),
+      id: '',
     },
   });
+
+  useEffect(() => {
+    if (open) {
+      reset({
+        platform: TaskPlatform.WEBSITE_CHAT,
+        restrictions: [''],
+        id: crypto.randomUUID(),
+      });
+    }
+  }, [open, reset]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -62,7 +73,7 @@ export function AssignTicketDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{t('assignTicket.title')}</DialogTitle>
           <DialogDescription>{t('assignTicket.description')}</DialogDescription>
@@ -145,7 +156,7 @@ export function AssignTicketDialog({
                   type="button"
                   variant="outline"
                   onClick={() => remove(index)}
-                  className="px-2"
+                  className="px-2 cursor-pointer"
                 >
                   ✕
                 </Button>

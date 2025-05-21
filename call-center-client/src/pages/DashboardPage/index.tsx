@@ -9,29 +9,33 @@ import {
   useResetSystem,
   useQueueStatus,
   useTaskAssign,
+  useCompletedTasks,
+  // useTaskComplete,
 } from '@/hooks';
-import { QueueModel, QueueItemModel } from '@/models';
+// import { QueueModel, QueueItemModel } from '@/models';
 import type { RegisterAgentDto, AssignTicketDto } from '@/models';
-import type { QueuedTicket } from '@/types';
-
-const parseQueuedItems = (queue: QueueModel | undefined): QueuedTicket[] => {
-  if (!queue) {
-    return [];
-  }
-
-  return [
-    ...queue.textQueue.map((item) => QueueItemModel.withType(item, 'text')),
-    ...queue.voiceQueue.map((item) => QueueItemModel.withType(item, 'voice')),
-  ];
-};
+import {
+  getAgentCallTasks,
+  getAgentTextTasks,
+  calculateAgentCapacity,
+  parseQueuedItems,
+  calculateActiveVoiceTasks,
+  calculateActiveTextTasks,
+  calculateTotalCapacity,
+} from '@/utils';
 
 export default function DashboardPage(): ReactNode {
-  const { data: activeAgents /*, isLoading, isError */, refetch: refetchAgents } = useAgents();
+  const {
+    data: activeAgents /*, isLoading, isError */,
+    refetch: refetchAgents,
+  } = useAgents();
   const { mutate: registerAgent /*, isPending, isSuccess, isError, error */ } =
     useCreateAgent();
   const { mutate: resetSystem /*, isLoading */ } = useResetSystem();
-  const { data: queue /*, isLoading, isError */ } = useQueueStatus();
+  const { data: queue /*, isLoading, isError */, refetch: refetchQueue } =
+    useQueueStatus();
   const { mutate: assignTicket } = useTaskAssign();
+  const { data: completedTasks /*, isLoading, error */ } = useCompletedTasks();
 
   // TODO: important -> handle errors
 
@@ -55,12 +59,13 @@ export default function DashboardPage(): ReactNode {
         console.error('Failed assign ticket', err);
       },
     });
-  }
+  };
 
   const handleSystemReset = () => {
     resetSystem(void 0, {
       onSuccess: () => {
         refetchAgents();
+        refetchQueue();
       },
       onError: (err) => {
         console.error('Failed system reset', err);
@@ -72,26 +77,29 @@ export default function DashboardPage(): ReactNode {
     <div className="p-4 space-y-4">
       <section className="border p-4 shadow">
         <DashboardView
-          activeCalls={3}
-          activeMessages={12}
-          completedTasks={2}
-          queuedTickets={[]}
+          activeCalls={calculateActiveVoiceTasks(activeAgents)}
+          activeMessages={calculateActiveTextTasks(activeAgents)}
+          completedTasks={completedTasks?.length || 0}
+          queuedTickets={parseQueuedItems(queue).length}
           onSystemResetClick={handleSystemReset}
         />
       </section>
 
       <section className="flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x border shadow">
-        <div className="flex-1 p-4">
-          <TicketsView tickets={parseQueuedItems(queue)} onAssignNewTicket={handleAssignNewTicket}/>
+        <div className="w-full sm:w-1/2 p-4">
+          <TicketsView
+            tickets={parseQueuedItems(queue)}
+            onAssignNewTicket={handleAssignNewTicket}
+          />
         </div>
-        <div className="flex-1 p-4">
+        <div className="w-full sm:w-1/2 p-4 overflow-auto">
           <AgentWorkloadView
             onRegisterNewAgent={handleRegisterNewAgent}
             agents={(activeAgents || []).map((agent) => {
               return {
                 ...agent,
-                completedTasks: 5,
-                totalTasks: 10,
+                activeTasks: agent.assignedTasks.length,
+                totalCapacity: calculateTotalCapacity(agent),
               };
             })}
           />
@@ -101,18 +109,11 @@ export default function DashboardPage(): ReactNode {
       <section className="border p-4 shadow">
         <ActiveAgentsView
           agents={(activeAgents || []).map((agent) => {
-            const activeCalls = agent.assignedTasks.filter(
-              (task) => task.platform === 'call'
-            ).length;
-            const activeMessages = agent.assignedTasks.filter(
-              (task) => task.platform !== 'call'
-            ).length;
-
             return {
               ...agent,
-              activeCalls,
-              activeMessages,
-              taskCapacity: 0,
+              activeCalls: getAgentCallTasks(agent).length,
+              activeMessages: getAgentTextTasks(agent).length,
+              taskCapacity: calculateAgentCapacity(agent),
             };
           })}
         />

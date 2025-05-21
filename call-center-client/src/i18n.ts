@@ -60,6 +60,7 @@ i18n
           common: {
             cancel: 'Cancel',
             submit: 'Submit',
+            numberOfQueuedTickets: 'Number of queued tickets',
           },
           callCenter: 'Call Center System',
           registerAgent: {
@@ -121,6 +122,7 @@ i18n
           common: {
             cancel: 'Stornieren',
             submit: 'Einreichen',
+            numberOfQueuedTickets: 'Anzahl der in der Warteschlange befindlichen Tickets',
           },
           callCenter: 'Callcenter-System',
           registerAgent: {

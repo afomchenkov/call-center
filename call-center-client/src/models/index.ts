@@ -4,3 +4,4 @@ export * from './assign-ticket';
 export { QueueModel } from './queue';
 export { QueueItemModel } from './queue-item';
 export { RegisterAgentModel } from './register-agent';
+export { CompletedTaskModel } from './competed-task';
