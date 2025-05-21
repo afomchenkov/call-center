@@ -294,6 +294,13 @@ def get_queue_status():
         total_queued=len(voice_items) + len(text_items)
     )
 
+# Get completed tasks
+@api_v1.get("/tasks/completed")
+def get_completed_tasks():
+    return {
+        "completed_tasks": list(service.completed_tasks)
+    }
+
 # Add a debug endpoint to see the current state
 @api_v1.get("/debug")
 def get_debug_info():
