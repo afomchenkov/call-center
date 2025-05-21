@@ -10,7 +10,16 @@ export const useAgent = (id: string) => {
       const res = await fetch(`${API_AGENTS}/${id}`);
 
       if (!res.ok) {
-        throw new Error('Failed to fetch agent');
+        let message = 'Failed to fetch agent';
+        try {
+          const errorBody = await res.json();
+          if (errorBody?.detail) {
+            message = errorBody.detail;
+          }
+        } catch {
+          throw new Error(message);
+        }
+        throw new Error(message);
       }
 
       const data: AgentDto = await res.json();

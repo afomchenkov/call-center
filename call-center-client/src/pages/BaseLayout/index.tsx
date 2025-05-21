@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Toaster } from '@/components/ui/sonner';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import {
@@ -109,6 +110,7 @@ export function BaseLayout(): ReactNode {
           onError={consoleError}
         >
           <main className="flex-1 p-4 overflow-auto" role="main">
+            <Toaster />
             {/* Routed page content */}
             <Outlet />
           </main>

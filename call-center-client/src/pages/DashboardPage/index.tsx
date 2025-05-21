@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 import { AgentWorkloadView } from '@/components/views/AgentWorkloadView';
 import { ActiveAgentsView } from '@/components/views/ActiveAgentsView';
 import { DashboardView } from '@/components/views/DashboardView';
@@ -10,6 +12,7 @@ import {
   useQueueStatus,
   useTaskAssign,
   useCompletedTasks,
+  useLog,
   // useTaskComplete,
 } from '@/hooks';
 // import { QueueModel, QueueItemModel } from '@/models';
@@ -26,18 +29,36 @@ import {
 
 export default function DashboardPage(): ReactNode {
   const {
-    data: activeAgents /*, isLoading, isError */,
+    data: activeAgents,
+    isError: isLoadActiveAgentsError,
     refetch: refetchAgents,
   } = useAgents();
-  const { mutate: registerAgent /*, isPending, isSuccess, isError, error */ } =
+  const { mutate: registerAgent, isError: isCreateAgentError } =
     useCreateAgent();
-  const { mutate: resetSystem /*, isLoading */ } = useResetSystem();
-  const { data: queue /*, isLoading, isError */, refetch: refetchQueue } =
-    useQueueStatus();
-  const { mutate: assignTicket } = useTaskAssign();
-  const { data: completedTasks /*, isLoading, error */ } = useCompletedTasks();
+  const { mutate: resetSystem, isError: isResetSystemError } = useResetSystem();
+  const {
+    data: queue,
+    isError: isLoadQueueError,
+    refetch: refetchQueue,
+  } = useQueueStatus();
+  const { mutate: assignTicket, isError: isAssignTicketError } =
+    useTaskAssign();
+  const { data: completedTasks, isError: isLoadCompletedTasksError } =
+    useCompletedTasks();
+  const { consoleError } = useLog();
 
-  // TODO: important -> handle errors
+  useEffect(() => {
+    // TODO: handle errors over global state
+    consoleError('An HTTP error has occurred...');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    isLoadActiveAgentsError,
+    isCreateAgentError,
+    isResetSystemError,
+    isLoadQueueError,
+    isAssignTicketError,
+    isLoadCompletedTasksError,
+  ]);
 
   const handleRegisterNewAgent = (data: RegisterAgentDto) => {
     registerAgent(data, {
@@ -45,7 +66,10 @@ export default function DashboardPage(): ReactNode {
         refetchAgents();
       },
       onError: (err) => {
-        console.error('Failed new agent', err);
+        toast.error('Failed to create a new agent', {
+          description: err.message,
+          closeButton: true,
+        });
       },
     });
   };
@@ -53,10 +77,14 @@ export default function DashboardPage(): ReactNode {
   const handleAssignNewTicket = (data: AssignTicketDto) => {
     assignTicket(data, {
       onSuccess: () => {
-        // refetch();
+        refetchAgents();
+        refetchQueue();
       },
       onError: (err) => {
-        console.error('Failed assign ticket', err);
+        toast.error('Failed to assign new ticket', {
+          description: err.message,
+          closeButton: true,
+        });
       },
     });
   };
@@ -68,7 +96,10 @@ export default function DashboardPage(): ReactNode {
         refetchQueue();
       },
       onError: (err) => {
-        console.error('Failed system reset', err);
+        toast.error('Failed to reset the system', {
+          description: err.message,
+          closeButton: true,
+        });
       },
     });
   };

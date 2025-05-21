@@ -14,7 +14,16 @@ export const useCreateAgent = () => {
       });
 
       if (!res.ok) {
-        throw new Error('Failed to create agent');
+        let message = 'Failed to create agent';
+        try {
+          const errorBody = await res.json();
+          if (errorBody?.detail) {
+            message = errorBody.detail;
+          }
+        } catch {
+          throw new Error(message);
+        }
+        throw new Error(message);
       }
 
       return res.json();

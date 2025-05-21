@@ -10,7 +10,16 @@ export const useAgents = () => {
       const res = await fetch(`${API_AGENTS}`);
 
       if (!res.ok) {
-        throw new Error('Network response was not ok');
+        let message = 'Failed to fetch agents';
+        try {
+          const errorBody = await res.json();
+          if (errorBody?.detail) {
+            message = errorBody.detail;
+          }
+        } catch {
+          throw new Error(message);
+        }
+        throw new Error(message);
       }
 
       const data: AgentDto[] = await res.json();
