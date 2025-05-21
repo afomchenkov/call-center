@@ -98,23 +98,22 @@ export function TicketsView(props: TasksViewProps): ReactNode {
             </p>
           ) : (
             filtered.map((ticket) => (
-              <li
-                key={ticket.ticketId}
-                className="py-2 px-4 flex justify-between hover:bg-gray-100"
-              >
-                <span className="font-medium mr-2">{ticket.ticketId.slice(-8)}</span>
-                <div>
-                  <span className="text-sm text-gray-600 mr-2">
-                    {`[${parseLanguageRestrictions(ticket.restrictions)}]`}
+              <li key={ticket.ticketId} className="py-2 px-4 hover:bg-gray-100">
+                <div className="flex justify-between min-w-0">
+                  <span className="font-medium mr-2 shrink-0">
+                    {ticket.ticketId.slice(-8)}
                   </span>
-                  <span>|</span>
-                  <span className="text-sm text-gray-600 mr-2 ml-2">
-                    {snakeToTitleCase(ticket.platform)}
-                  </span>
-                  <span>|</span>
-                  <span className="text-sm text-gray-600 ml-2">
-                    {formatQueueTicketDate(ticket.createdAt)}
-                  </span>
+                  <div className="overflow-x-auto whitespace-nowrap text-sm text-gray-600 ml-auto">
+                    <span className="mr-2">
+                      [{parseLanguageRestrictions(ticket.restrictions)}]
+                    </span>
+                    <span className="mx-1">|</span>
+                    <span className="mr-2">
+                      {snakeToTitleCase(ticket.platform)}
+                    </span>
+                    <span className="mx-1">|</span>
+                    <span>{formatQueueTicketDate(ticket.createdAt)}</span>
+                  </div>
                 </div>
               </li>
             ))

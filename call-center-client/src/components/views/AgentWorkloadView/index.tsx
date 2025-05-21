@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Progress } from '@/components/ui/progress';
 import { CircleStackIcon, PlusIcon } from '@heroicons/react/24/outline';
@@ -28,6 +29,7 @@ type AgentWorkloadViewProps = {
 
 export function AgentWorkloadView(props: AgentWorkloadViewProps): ReactNode {
   const { agents = [], onRegisterNewAgent } = props;
+  const navigate = useNavigate();
 
   const [openRegisterAgentDialog, setOpenRegisterAgentDialog] = useState(false);
   const { t } = useTranslation();
@@ -37,6 +39,10 @@ export function AgentWorkloadView(props: AgentWorkloadViewProps): ReactNode {
     if (onRegisterNewAgent) {
       onRegisterNewAgent(data);
     }
+  };
+
+  const handleNavigateToAgent = (id: string) => {
+    navigate(`/agents/${id}`);
   };
 
   return (
@@ -71,14 +77,16 @@ export function AgentWorkloadView(props: AgentWorkloadViewProps): ReactNode {
         <div className="max-h-80 overflow-y-auto pr-1">
           <ul className="space-y-4">
             {agents.map((agent) => {
-              const progress = agent.totalCapacity > 0
+              const progress =
+                agent.totalCapacity > 0
                   ? (agent.activeTasks / agent.totalCapacity) * 100
                   : 0;
 
               return (
                 <li
                   key={agent.id}
-                  className="p-4 border rounded shadow-sm space-y-2"
+                  className="p-4 border rounded shadow-sm space-y-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleNavigateToAgent(agent.id)}
                 >
                   <div className="flex justify-between items-center">
                     <div>

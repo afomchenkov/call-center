@@ -34,6 +34,10 @@ export const router = createBrowserRouter([
         element: <WithSuspense component={<AgentsPage />} />,
       },
       {
+        path: '/agents/:id',
+        element: <WithSuspense component={<AgentsPage />} />,
+      },
+      {
         path: '*',
         element: <NotFoundPage />,
       },

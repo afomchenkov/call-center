@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import type { To } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { HomeIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { HomeIcon } from '@heroicons/react/24/outline';
 
 type NavigationLinkProps = {
   path: To;
@@ -39,11 +39,6 @@ export const Navigation = () => {
   return (
     <nav aria-label="Navigation Menu" role="list">
       <NavigationLink path="/" caption={t('dashboard')} icon={<HomeIcon />} />
-      <NavigationLink
-        path="/agents"
-        caption={t('agents')}
-        icon={<UserGroupIcon />}
-      />
     </nav>
   );
 };

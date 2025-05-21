@@ -13,9 +13,7 @@ import {
   useTaskAssign,
   useCompletedTasks,
   useLog,
-  // useTaskComplete,
 } from '@/hooks';
-// import { QueueModel, QueueItemModel } from '@/models';
 import type { RegisterAgentDto, AssignTicketDto } from '@/models';
 import {
   getAgentCallTasks,
@@ -48,9 +46,18 @@ export default function DashboardPage(): ReactNode {
   const { consoleError } = useLog();
 
   useEffect(() => {
-    // TODO: handle errors over global state
-    consoleError('An HTTP error has occurred...');
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // TODO: handle errors properly over global state
+    if (
+      isLoadActiveAgentsError ||
+      isCreateAgentError ||
+      isResetSystemError ||
+      isLoadQueueError ||
+      isAssignTicketError ||
+      isLoadCompletedTasksError
+    ) {
+      consoleError('An HTTP error has occurred...');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isLoadActiveAgentsError,
     isCreateAgentError,
