@@ -52,7 +52,6 @@ export function AssignTicketDialog({
   });
 
   useEffect(() => {
-    console.log('AssignTicketDialog mounted');
     if (open) {
       reset({
         platform: TaskPlatform.WEBSITE_CHAT,
