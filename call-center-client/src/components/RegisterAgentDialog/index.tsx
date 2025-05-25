@@ -58,8 +58,15 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
     reset();
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      reset();
+    }
+    onOpenChange(open);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t('registerAgent.addNewAgent')}</DialogTitle>
@@ -135,7 +142,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
               type="button"
               variant="outline"
               className="cursor-pointer"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleOpenChange(false)}
             >
               {t('common.cancel')}
             </Button>

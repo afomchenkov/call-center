@@ -52,6 +52,7 @@ export function AssignTicketDialog({
   });
 
   useEffect(() => {
+    console.log('AssignTicketDialog mounted');
     if (open) {
       reset({
         platform: TaskPlatform.WEBSITE_CHAT,
@@ -71,8 +72,15 @@ export function AssignTicketDialog({
     reset();
   };
 
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      reset();
+    }
+    onOpenChange(open);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{t('assignTicket.title')}</DialogTitle>
@@ -182,7 +190,7 @@ export function AssignTicketDialog({
               type="button"
               variant="outline"
               className="cursor-pointer"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleOpenChange(false)}
             >
               {t('common.cancel')}
             </Button>
