@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
@@ -7,11 +8,13 @@ import { toast } from 'sonner';
 import { useTaskComplete, useAgent } from '@/hooks';
 
 function MissingIdError(): ReactNode {
+  const { t } = useTranslation();
+
   return (
     <Alert variant="destructive" className="mt-4">
-      <AlertTitle>Error</AlertTitle>
+      <AlertTitle>{t('agentsPage.errorLoadingAgentData')}</AlertTitle>
       <AlertDescription>
-        The ID was not provided. Please select an agent to continue.
+        {t('agentsPage.missingId')}
       </AlertDescription>
     </Alert>
   );
@@ -21,6 +24,8 @@ export default function AgentsPage(): ReactNode {
   const { id: agentId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { mutate: completeTask } = useTaskComplete();
+  const { t } = useTranslation();
+
   const {
     data: agentData,
     refetch: refetchAgent,
@@ -34,7 +39,7 @@ export default function AgentsPage(): ReactNode {
   }
 
   if (isLoading) {
-    return <p className="text-gray-600">Loading agent data...</p>;
+    return <p className="text-gray-600">{t('agentsPage.loadingAgents')}</p>;
   }
 
   if (isError || !agentData) {
@@ -72,7 +77,7 @@ export default function AgentsPage(): ReactNode {
         <ChevronLeftIcon />
       </Button>
 
-      <h2 className="text-xl font-bold">Tasks assigned to {agentData.name}</h2>
+      <h2 className="text-xl font-bold">{t('agentsPage.tasksAssigned')} {agentData.name}</h2>
 
       <ul className="space-y-2">
         {agentData.assignedTasks.length > 0 ? (
@@ -83,13 +88,13 @@ export default function AgentsPage(): ReactNode {
                 className="w-full text-left border rounded-lg px-4 py-3 bg-muted hover:bg-muted/70 transition shadow-sm hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer"
               >
                 <div className="font-semibold text-base text-foreground">
-                  Task ID: {task.id.slice(-8)} - click to complete
+                  Task ID: {task.id.slice(-8)} - {t('agentsPage.clickComplete')}
                 </div>
               </button>
             </li>
           ))
         ) : (
-          <li className="text-sm text-muted-foreground">No tasks assigned</li>
+          <li className="text-sm text-muted-foreground">{t('agentsPage.noTasks')}</li>
         )}
       </ul>
     </div>

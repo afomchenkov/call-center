@@ -71,6 +71,14 @@ i18n
             save: 'Save',
             register: 'Register',
           },
+          agentsPage: {
+            loadingAgents: 'Loading agent data...',
+            missingId: 'The ID was not provided. Please select an agent to continue.',
+            errorLoadingAgentData: 'Error',
+            tasksAssigned: 'Tasks assigned to',
+            noTasks: 'No tasks assigned',
+            clickComplete: 'Click to complete',
+          },
         },
       },
       de: {
@@ -122,7 +130,8 @@ i18n
           common: {
             cancel: 'Stornieren',
             submit: 'Einreichen',
-            numberOfQueuedTickets: 'Anzahl der in der Warteschlange befindlichen Tickets',
+            numberOfQueuedTickets:
+              'Anzahl der in der Warteschlange befindlichen Tickets',
           },
           callCenter: 'Callcenter-System',
           registerAgent: {
@@ -132,6 +141,14 @@ i18n
             addLanguage: 'Sprache hinzufügen',
             save: 'Speichern',
             register: 'Registrieren',
+          },
+          agentsPage: {
+            loadingAgents: 'Agentendaten werden geladen ...',
+            missingId: 'Die ID wurde nicht angegeben. Bitte wählen Sie einen Agenten aus, um fortzufahren.',
+            errorLoadingAgentData: 'Fehler',
+            tasksAssigned: 'Aufgaben zugewiesen an',
+            noTasks: 'Keine Aufgaben zugewiesen',
+            clickComplete: 'Zum Vervollständigen klicken',
           },
         },
       },
