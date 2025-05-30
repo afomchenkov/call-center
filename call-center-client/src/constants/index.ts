@@ -27,3 +27,10 @@ export const LANGUAGE_CODES: Record<string, string> = {
   Arabic: 'ar',
   Italian: 'it',
 };
+
+export const AVAILABLE_CHANNELS = [
+  { name: 'Website Chat', value: 'website_chat' },
+  { name: 'Facebook Chat', value: 'facebook_chat' },
+  { name: 'Email', value: 'email' },
+  { name: 'Call', value: 'call' },
+] as const;

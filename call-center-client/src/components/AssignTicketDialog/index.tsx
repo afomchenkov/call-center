@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { assignTicketSchema } from '@/schemas/ticketSchema';
 import type { AssignTicketFormValues } from '@/schemas/ticketSchema';
 import { TaskPlatform } from '@/types';
-import { LANGUAGES } from '@/constants';
+import { LANGUAGES, AVAILABLE_CHANNELS } from '@/constants';
 
 type AssignTicketDialogProps = {
   open: boolean;
@@ -100,35 +100,22 @@ export function AssignTicketDialog({
                     <SelectValue placeholder="Select platform" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem
-                      value="website_chat"
-                      className="cursor-pointer hover:bg-gray-100"
-                    >
-                      Website Chat
-                    </SelectItem>
-                    <SelectItem
-                      value="facebook_chat"
-                      className="cursor-pointer hover:bg-gray-100"
-                    >
-                      Facebook Chat
-                    </SelectItem>
-                    <SelectItem
-                      value="email"
-                      className="cursor-pointer hover:bg-gray-100"
-                    >
-                      Email
-                    </SelectItem>
-                    <SelectItem
-                      value="call"
-                      className="cursor-pointer hover:bg-gray-100"
-                    >
-                      Call
-                    </SelectItem>
+                    {AVAILABLE_CHANNELS.map(({ name, value }) => {
+                      return (
+                        <SelectItem
+                          key={value}
+                          value={value}
+                          className="cursor-pointer hover:bg-gray-100"
+                        >
+                          {name}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
               )}
             />
-            
+
             {errors.platform && (
               <p className="text-sm text-red-500 mt-1">
                 {errors.platform.message}
