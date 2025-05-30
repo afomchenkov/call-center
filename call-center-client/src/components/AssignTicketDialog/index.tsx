@@ -42,6 +42,7 @@ export function AssignTicketDialog({
     handleSubmit,
     reset,
     formState: { errors },
+    watch,
   } = useForm<AssignTicketFormValues>({
     resolver: zodResolver(assignTicketSchema),
     defaultValues: {
@@ -65,6 +66,7 @@ export function AssignTicketDialog({
     control,
     name: 'restrictions',
   } as never);
+  const selectedLangRestrictions = watch('restrictions');
 
   const handleFormSubmit = (data: AssignTicketFormValues) => {
     onFormSubmit(data);
@@ -126,6 +128,7 @@ export function AssignTicketDialog({
                 </Select>
               )}
             />
+            
             {errors.platform && (
               <p className="text-sm text-red-500 mt-1">
                 {errors.platform.message}
@@ -135,40 +138,55 @@ export function AssignTicketDialog({
 
           <div>
             <Label className="mb-2">{t('assignTicket.restrictions')}</Label>
-            {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-2 mb-1 items-center">
-                <Controller
-                  control={control}
-                  name={`restrictions.${index}`}
-                  render={({ field }) => (
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select language" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {LANGUAGES.map((lang) => (
-                          <SelectItem
-                            className="cursor-pointer hover:bg-gray-100"
-                            key={lang}
-                            value={lang}
-                          >
-                            {lang}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => remove(index)}
-                  className="px-2 cursor-pointer"
-                >
-                  ✕
-                </Button>
-              </div>
-            ))}
+
+            {fields.map((field, index) => {
+              const { id } = field as never;
+              const currentValue = selectedLangRestrictions?.[index];
+              const availableLanguages = LANGUAGES.filter(
+                (lang) =>
+                  !selectedLangRestrictions?.includes(lang) ||
+                  lang === currentValue
+              );
+
+              return (
+                <div key={id} className="flex gap-2 mb-1 items-center">
+                  <Controller
+                    control={control}
+                    name={`restrictions.${index}`}
+                    render={({ field }) => (
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select language" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableLanguages.map((lang) => (
+                            <SelectItem
+                              className="cursor-pointer hover:bg-gray-100"
+                              key={lang}
+                              value={lang}
+                            >
+                              {lang}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => remove(index)}
+                    className="px-2 cursor-pointer"
+                  >
+                    ✕
+                  </Button>
+                </div>
+              );
+            })}
+
             <Button
               type="button"
               variant="secondary"

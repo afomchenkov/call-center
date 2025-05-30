@@ -40,6 +40,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
     reset,
     setValue,
     formState: { errors },
+    watch,
   } = useForm<AgentFormValues>({
     resolver: zodResolver(agentSchema),
     defaultValues: {
@@ -52,6 +53,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
     control,
     name: 'language_skills',
   } as never);
+  const selectedLanguages = watch('language_skills');
 
   const onSubmit = (data: AgentFormValues) => {
     onFormSubmit(data);
@@ -85,11 +87,17 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
           <div className="space-y-2">
             <Label>{t('registerAgent.languageSkills')}</Label>
             {fields.map((field, index) => {
-              const { id, value } = field as never;
+              const { id } = field as never;
+              const currentValue = selectedLanguages?.[index];
+              const availableLanguages = LANGUAGES.filter(
+                (lang) =>
+                  !selectedLanguages?.includes(lang) || lang === currentValue
+              );
+
               return (
                 <div key={id} className="flex gap-2 items-center">
                   <Select
-                    value={value}
+                    value={currentValue}
                     onValueChange={(val) =>
                       setValue(`language_skills.${index}`, val)
                     }
@@ -98,7 +106,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
                     <SelectContent>
-                      {LANGUAGES.map((lang) => (
+                      {availableLanguages.map((lang) => (
                         <SelectItem
                           className="cursor-pointer hover:bg-gray-100"
                           key={lang}

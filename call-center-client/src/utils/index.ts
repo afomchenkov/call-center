@@ -112,3 +112,6 @@ export const parseQueuedItems = (
 };
 
 export const Noop = () => {};
+
+export const toDashedLowerCase = (str: string) =>
+  str.toLowerCase().replace(' ', '-');
