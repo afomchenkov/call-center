@@ -1,11 +1,16 @@
 import type { ReactNode } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, useNavigate, redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
-import { useTaskComplete, useAgent } from '@/hooks';
+import { useStore } from '@/state/storeHooks';
+import { store } from '@/state/store';
+import { initializeAgent, loadAgent, loadAgentError } from './Agent.slice';
+import { getAgent } from '@/services/agent.service';
+import { useTaskComplete } from '@/hooks';
 
 function MissingIdError(): ReactNode {
   const { t } = useTranslation();
@@ -13,26 +18,41 @@ function MissingIdError(): ReactNode {
   return (
     <Alert variant="destructive" className="mt-4">
       <AlertTitle>{t('agentsPage.errorLoadingAgentData')}</AlertTitle>
-      <AlertDescription>
-        {t('agentsPage.missingId')}
-      </AlertDescription>
+      <AlertDescription>{t('agentsPage.missingId')}</AlertDescription>
     </Alert>
   );
 }
 
+async function loadAgentData(id: string) {
+  store.dispatch(initializeAgent());
+
+  try {
+    const agent = await getAgent(id);
+
+    if (agent.isOk()) {
+      store.dispatch(loadAgent(agent.unwrap()));
+    }
+
+    if (agent.isErr()) {
+      store.dispatch(loadAgentError());
+    }
+  } catch {
+    redirect('');
+  }
+}
+
+// TODO: add edit agent form
 export default function AgentsPage(): ReactNode {
-  const { id: agentId } = useParams<{ id: string }>();
   const navigate = useNavigate();
+
+  const { id: agentId } = useParams<{ id: string }>();
   const { mutate: completeTask } = useTaskComplete();
   const { t } = useTranslation();
+  const { agent, isLoading, isError } = useStore(({ agent }) => agent);
 
-  const {
-    data: agentData,
-    refetch: refetchAgent,
-    isLoading,
-    isError,
-    error,
-  } = useAgent(agentId || '');
+  useEffect(() => {
+    loadAgentData(agentId || '');
+  }, [agentId]);
 
   if (!agentId) {
     return <MissingIdError />;
@@ -42,22 +62,22 @@ export default function AgentsPage(): ReactNode {
     return <p className="text-gray-600">{t('agentsPage.loadingAgents')}</p>;
   }
 
-  if (isError || !agentData) {
-    return (
-      <p className="text-red-600 font-medium">{(error as Error).message}</p>
-    );
+  if (isError || agent.isNone()) {
+    return <p className="text-red-600 font-medium">{t('agentsPage.errorOrNoData')}</p>;
   }
+
+  const agentData = agent.unwrap();
 
   const handleComplete = (taskId: string) => {
     completeTask(
       {
-        agent_identifier: agentData.id,
+        agent_identifier: agentId,
         task_id: taskId,
       },
       {
         onSuccess: () => {
           toast.success(`Task ${taskId.slice(-6)} completed`);
-          refetchAgent();
+          loadAgentData(agentId);
         },
         onError: (error: Error) => {
           toast.error(`Failed to complete task: ${error.message}`);
@@ -77,11 +97,13 @@ export default function AgentsPage(): ReactNode {
         <ChevronLeftIcon />
       </Button>
 
-      <h2 className="text-xl font-bold">{t('agentsPage.tasksAssigned')} {agentData.name}</h2>
+      <h2 className="text-xl font-bold">
+        {t('agentsPage.tasksAssigned')} {agentData.name}
+      </h2>
 
       <ul className="space-y-2">
-        {agentData.assignedTasks.length > 0 ? (
-          agentData.assignedTasks.map((task) => (
+        {agentData.assigned_tasks.length > 0 ? (
+          agentData.assigned_tasks.map((task) => (
             <li key={task.id}>
               <button
                 onClick={() => handleComplete(task.id)}
@@ -94,7 +116,9 @@ export default function AgentsPage(): ReactNode {
             </li>
           ))
         ) : (
-          <li className="text-sm text-muted-foreground">{t('agentsPage.noTasks')}</li>
+          <li className="text-sm text-muted-foreground">
+            {t('agentsPage.noTasks')}
+          </li>
         )}
       </ul>
     </div>

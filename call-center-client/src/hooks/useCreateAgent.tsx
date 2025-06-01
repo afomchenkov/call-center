@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { API_AGENTS } from '@/api';
-import type { RegisterAgentDto } from '@/models';
+import type { RegisterAgentPayload } from '@/models';
 
 export const useCreateAgent = () => {
   return useMutation({
-    mutationFn: async (newAgent: RegisterAgentDto) => {
+    mutationFn: async (newAgent: RegisterAgentPayload) => {
       const res = await fetch(API_AGENTS, {
         method: 'POST',
         headers: {

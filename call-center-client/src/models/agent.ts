@@ -1,15 +1,33 @@
+import { array, object, string } from 'decoders';
+import type { Decoder } from 'decoders';
 import { AssignedSkillModel } from './agent-skill';
-import type { AssignedSkillDto } from './agent-skill';
+import { assignedSkillDecoder } from './agent-skill';
+import type { AssignedSkill } from './agent-skill';
 import { BaseModel } from './base-model';
 
-export type AgentDto = {
+export type Agent = {
   id: string;
   name: string;
   language_skills: string[];
-  assigned_tasks: AssignedSkillDto[];
+  assigned_tasks: AssignedSkill[];
 };
 
-export type RegisterAgentDto = {
+export const agentDecoder: Decoder<Agent> = object({
+  id: string,
+  name: string,
+  language_skills: array(string),
+  assigned_tasks: array(assignedSkillDecoder),
+});
+
+export interface MultipleAgents {
+  agents: Agent[];
+}
+
+export const multipleAgentsDecoder: Decoder<MultipleAgents> = object({
+  agents: array(agentDecoder),
+});
+
+export type RegisterAgentPayload = {
   name: string;
   language_skills: string[];
 };
@@ -33,7 +51,7 @@ export class AgentModel extends BaseModel {
     this.assignedTasks = assignedTasks;
   }
 
-  static fromDto(dto: AgentDto): AgentModel {
+  static fromDto(dto: Agent): AgentModel {
     return new AgentModel(
       dto.id,
       dto.name,

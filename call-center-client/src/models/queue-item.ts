@@ -1,7 +1,9 @@
+import { array, boolean, oneOf, number, object, string } from 'decoders';
+import type { Decoder } from 'decoders';
 import { TaskPlatform } from '@/types';
 import { BaseModel } from './base-model';
 
-export type QueueItemDto = {
+export type QueueItem = {
   priority: number;
   position: number;
   ticket_id: string;
@@ -10,6 +12,16 @@ export type QueueItemDto = {
   is_voice: boolean;
   created_at: number;
 };
+
+export const queueItemDecoder: Decoder<QueueItem> = object({
+  priority: number,
+  position: number,
+  ticket_id: string,
+  platform: oneOf([...Object.values(TaskPlatform)]),
+  restrictions: array(string),
+  is_voice: boolean,
+  created_at: number,
+});
 
 export class QueueItemModel extends BaseModel {
   public priority: number;
@@ -39,7 +51,7 @@ export class QueueItemModel extends BaseModel {
     this.createdAt = createdAt;
   }
 
-  static fromDto(dto: QueueItemDto): QueueItemModel {
+  static fromDto(dto: QueueItem): QueueItemModel {
     return new QueueItemModel(
       dto.priority,
       dto.position,

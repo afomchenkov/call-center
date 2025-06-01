@@ -1,4 +1,5 @@
 import type { ReactNode, ReactElement } from 'react';
+import { array, dict, string } from 'decoders';
 import { QueueItemModel } from '@/models';
 
 type Year = `${number}${number}${number}${number}`;
@@ -27,3 +28,7 @@ export enum TaskPlatform {
 export type QueuedTicket = QueueItemModel & {
   type: 'voice' | 'text';
 };
+
+export type GenericErrors = Record<string, string[]>;
+
+export const genericErrorsDecoder = dict(array(string));

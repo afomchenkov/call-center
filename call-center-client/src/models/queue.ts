@@ -1,12 +1,20 @@
-import { QueueItemModel } from './queue-item';
-import type { QueueItemDto } from './queue-item';
+import { array, number, object } from 'decoders';
+import type { Decoder } from 'decoders';
+import { QueueItemModel, queueItemDecoder } from './queue-item';
+import type { QueueItem } from './queue-item';
 import { BaseModel } from './base-model';
 
-export type QueueDto = {
-  voice_queue: QueueItemDto[];
-  text_queue: QueueItemDto[];
+export type Queue = {
+  voice_queue: QueueItem[];
+  text_queue: QueueItem[];
   total_queued: number;
 };
+
+export const queueDecoder: Decoder<Queue> = object({
+  voice_queue: array(queueItemDecoder),
+  text_queue: array(queueItemDecoder),
+  total_queued: number,
+});
 
 export class QueueModel extends BaseModel {
   public voiceQueue: QueueItemModel[];
@@ -24,7 +32,7 @@ export class QueueModel extends BaseModel {
     this.totalQueued = totalQueued;
   }
 
-  static fromDto(dto: QueueDto): QueueModel {
+  static fromDto(dto: Queue): QueueModel {
     return new QueueModel(
       dto.voice_queue.map(QueueItemModel.fromDto),
       dto.text_queue.map(QueueItemModel.fromDto),

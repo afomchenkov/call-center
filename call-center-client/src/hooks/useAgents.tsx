@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { API_AGENTS } from '@/api';
 import { AgentModel } from '@/models';
-import type { AgentDto } from '@/models';
+import type { Agent } from '@/models';
 
 export const useAgents = () => {
   return useQuery<AgentModel[]>({
@@ -22,7 +22,7 @@ export const useAgents = () => {
         throw new Error(message);
       }
 
-      const data: AgentDto[] = await res.json();
+      const data: Agent[] = await res.json();
       return data.map(AgentModel.fromDto);
     },
     refetchInterval: 5000,

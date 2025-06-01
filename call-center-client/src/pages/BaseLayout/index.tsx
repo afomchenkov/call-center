@@ -16,7 +16,7 @@ import {
   MoonIcon,
   GlobeAltIcon,
 } from '@heroicons/react/24/outline';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/errors/ErrorBoundary';
 import { Navigation } from '@/components/Navigation';
 import { useLog, useThemeSwitch } from '@/hooks';
 

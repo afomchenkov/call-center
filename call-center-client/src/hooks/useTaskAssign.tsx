@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import { API_TICKETS } from '@/api';
-import type { AssignTicketDto } from '@/models';
+import type { AssignTicket } from '@/models';
 
 export const useTaskAssign = () => {
   return useMutation({
-    mutationFn: async (payload: AssignTicketDto) => {
+    mutationFn: async (payload: AssignTicket) => {
       const res = await fetch(`${API_TICKETS}/assign`, {
         method: 'POST',
         headers: {

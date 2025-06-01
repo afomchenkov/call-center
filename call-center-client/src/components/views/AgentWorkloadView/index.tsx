@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { CircleStackIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/button';
 import { RegisterAgentDialog } from '@/components/RegisterAgentDialog';
-import type { RegisterAgentDto } from '@/models';
+import type { RegisterAgentPayload } from '@/models';
 
 /**
  * - Display each agent’s current task load and capacity usage
@@ -24,7 +24,7 @@ type Agent = {
 
 type AgentWorkloadViewProps = {
   agents: Agent[];
-  onRegisterNewAgent: (data: RegisterAgentDto) => void;
+  onRegisterNewAgent: (data: RegisterAgentPayload) => void;
 };
 
 export function AgentWorkloadView(props: AgentWorkloadViewProps): ReactNode {
@@ -34,7 +34,7 @@ export function AgentWorkloadView(props: AgentWorkloadViewProps): ReactNode {
   const [openRegisterAgentDialog, setOpenRegisterAgentDialog] = useState(false);
   const { t } = useTranslation();
 
-  const handleRegisterNewAgent = (data: RegisterAgentDto) => {
+  const handleRegisterNewAgent = (data: RegisterAgentPayload) => {
     setOpenRegisterAgentDialog(false);
     if (onRegisterNewAgent) {
       onRegisterNewAgent(data);

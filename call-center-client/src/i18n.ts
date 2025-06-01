@@ -73,6 +73,7 @@ i18n
           },
           agentsPage: {
             loadingAgents: 'Loading agent data...',
+            errorOrNoData: 'No data or error loading the data...',
             missingId: 'The ID was not provided. Please select an agent to continue.',
             errorLoadingAgentData: 'Error',
             tasksAssigned: 'Tasks assigned to',
@@ -144,6 +145,7 @@ i18n
           },
           agentsPage: {
             loadingAgents: 'Agentendaten werden geladen ...',
+            errorOrNoData: 'Keine Daten oder Fehler beim Laden der Daten...',
             missingId: 'Die ID wurde nicht angegeben. Bitte wählen Sie einen Agenten aus, um fortzufahren.',
             errorLoadingAgentData: 'Fehler',
             tasksAssigned: 'Aufgaben zugewiesen an',

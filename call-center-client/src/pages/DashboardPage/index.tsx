@@ -14,7 +14,7 @@ import {
   useCompletedTasks,
   useLog,
 } from '@/hooks';
-import type { RegisterAgentDto, AssignTicketDto } from '@/models';
+import type { RegisterAgentPayload, AssignTicket } from '@/models';
 import {
   getAgentCallTasks,
   getAgentTextTasks,
@@ -67,7 +67,7 @@ export default function DashboardPage(): ReactNode {
     isLoadCompletedTasksError,
   ]);
 
-  const handleRegisterNewAgent = (data: RegisterAgentDto) => {
+  const handleRegisterNewAgent = (data: RegisterAgentPayload) => {
     registerAgent(data, {
       onSuccess: () => {
         refetchAgents();
@@ -81,7 +81,7 @@ export default function DashboardPage(): ReactNode {
     });
   };
 
-  const handleAssignNewTicket = (data: AssignTicketDto) => {
+  const handleAssignNewTicket = (data: AssignTicket) => {
     assignTicket(data, {
       onSuccess: () => {
         refetchAgents();

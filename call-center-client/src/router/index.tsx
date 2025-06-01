@@ -7,7 +7,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { PageLoader } from '@/components/PageLoader';
 
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
-const AgentsPage = lazy(() => import('@/pages/AgentsPage'));
+const AgentsPage = lazy(() => import('@/pages/AgentPage'));
 
 type WithSuspenseProps = {
   component: null | ReactNode;
