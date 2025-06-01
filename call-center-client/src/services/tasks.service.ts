@@ -57,6 +57,11 @@ export async function completeTask(
   }
 }
 
+/**
+ * Get completed tasks
+ * 
+ * @returns 
+ */
 export async function getCompletedTasks(): Promise<
   Result<MultipleCompletedTasks, GenericErrors>
 > {
