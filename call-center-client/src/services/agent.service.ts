@@ -14,9 +14,7 @@ import { agentDecoder, multipleAgentsDecoder } from '@/models';
  * @param agentId
  * @returns
  */
-export async function getAgent(
-  agentId: string
-): Promise<Result<Agent, GenericErrors>> {
+export async function getAgent(agentId: string): Promise<Result<Agent, GenericErrors>> {
   try {
     const url = new URL(`${API_AGENTS}/${agentId}`);
     const { data } = await axios.get(url.toString());
@@ -33,17 +31,14 @@ export async function getAgent(
  *
  * @returns
  */
-export async function getAgents(): Promise<
-  Result<MultipleAgents, GenericErrors>
-> {
+export async function getAgents(): Promise<Result<MultipleAgents, GenericErrors>> {
   try {
     const url = new URL(`${API_AGENTS}`);
     const { data } = await axios.get(url.toString());
-
     return Ok(multipleAgentsDecoder.verify(data));
   } catch (error) {
-    const { data } = error as never;
-    return Err(object({ errors: genericErrorsDecoder }).verify(data).errors);
+    const data = Object.values(error as never);
+    return Err(object({ errors: genericErrorsDecoder }).verify({ errors: { data } }).errors);
   }
 }
 
@@ -53,17 +48,15 @@ export async function getAgents(): Promise<
  * @param payload
  * @returns
  */
-export async function createAgent(
-  payload: RegisterAgentPayload
-): Promise<Result<Agent, GenericErrors>> {
+export async function createAgent(payload: RegisterAgentPayload): Promise<Result<Agent, GenericErrors>> {
   try {
     const url = new URL(`${API_AGENTS}`);
     const { data } = await axios.post(url.toString(), JSON.stringify(payload));
 
     return Ok(agentDecoder.verify(data));
   } catch (error) {
-    const { data } = error as never;
-    return Err(object({ errors: genericErrorsDecoder }).verify(data).errors);
+    const data = Object.values(error as never);
+    return Err(object({ errors: genericErrorsDecoder }).verify({ errors: { data } }).errors);
   }
 }
 

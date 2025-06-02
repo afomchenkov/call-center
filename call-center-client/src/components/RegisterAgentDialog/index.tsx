@@ -78,7 +78,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <Label className="mb-2">{t('registerAgent.name')}</Label>
-            <Input {...register('name')} placeholder="Agent name" />
+            <Input {...register('name')} placeholder="Agent name" data-testid="agent-name"/>
             {errors.name && (
               <p className="text-sm text-red-500 mt-2">{errors.name.message}</p>
             )}
@@ -102,13 +102,14 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
                       setValue(`language_skills.${index}`, val)
                     }
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full" data-testid="language-select-trigger">
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent data-testid="language-options">
                       {availableLanguages.map((lang) => (
                         <SelectItem
                           className="cursor-pointer hover:bg-gray-100"
+                          data-testid="language-option"
                           key={lang}
                           value={lang}
                         >
@@ -154,7 +155,7 @@ export function RegisterAgentDialog(props: RegisterAgentDialogProps) {
             >
               {t('common.cancel')}
             </Button>
-            <Button type="submit" className="cursor-pointer">
+            <Button type="submit" className="cursor-pointer" data-testid="submit-button">
               {t('registerAgent.register')}
             </Button>
           </DialogFooter>

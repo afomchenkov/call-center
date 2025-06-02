@@ -37,7 +37,7 @@ export const Navigation = () => {
   const { t } = useTranslation();
 
   return (
-    <nav aria-label="Navigation Menu" role="list">
+    <nav aria-label="Navigation Menu" role="navigation">
       <NavigationLink path="/" caption={t('dashboard')} icon={<HomeIcon />} />
     </nav>
   );

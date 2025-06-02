@@ -1,23 +1,22 @@
-import { object, string, oneOf } from 'decoders';
+import { object, string } from 'decoders';
 import type { Decoder } from 'decoders';
-import { TaskPlatform } from '@/types';
 import { BaseModel } from './base-model';
 
 export type AssignedSkill = {
   id: string;
-  platform: TaskPlatform;
+  platform: string;
 };
 
 export const assignedSkillDecoder: Decoder<AssignedSkill> = object({
   id: string,
-  platform: oneOf([...Object.values(TaskPlatform)]),
+  platform: string,
 });
 
 export class AssignedSkillModel extends BaseModel {
   public id: string;
-  public platform: TaskPlatform;
+  public platform: string;
 
-  constructor(id: string, platform: TaskPlatform) {
+  constructor(id: string, platform: string) {
     super();
     this.id = id;
     this.platform = platform;

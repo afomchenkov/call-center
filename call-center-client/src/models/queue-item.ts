@@ -1,13 +1,12 @@
-import { array, boolean, oneOf, number, object, string } from 'decoders';
+import { array, boolean, number, object, string } from 'decoders';
 import type { Decoder } from 'decoders';
-import { TaskPlatform } from '@/types';
 import { BaseModel } from './base-model';
 
 export type QueueItem = {
   priority: number;
   position: number;
   ticket_id: string;
-  platform: TaskPlatform;
+  platform: string;
   restrictions: string[];
   is_voice: boolean;
   created_at: number;
@@ -17,7 +16,7 @@ export const queueItemDecoder: Decoder<QueueItem> = object({
   priority: number,
   position: number,
   ticket_id: string,
-  platform: oneOf([...Object.values(TaskPlatform)]),
+  platform: string,
   restrictions: array(string),
   is_voice: boolean,
   created_at: number,
@@ -27,7 +26,7 @@ export class QueueItemModel extends BaseModel {
   public priority: number;
   public position: number;
   public ticketId: string;
-  public platform: TaskPlatform;
+  public platform: string;
   public restrictions: string[];
   public isVoice: boolean;
   public createdAt: number;
@@ -36,7 +35,7 @@ export class QueueItemModel extends BaseModel {
     priority: number,
     position: number,
     ticketId: string,
-    platform: TaskPlatform,
+    platform: string,
     restrictions: string[],
     isVoice: boolean,
     createdAt: number

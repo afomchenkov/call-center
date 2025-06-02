@@ -95,14 +95,15 @@ export function AssignTicketDialog({
               control={control}
               name="platform"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
+                <Select value={field.value} onValueChange={field.onChange} data-testid="platform">
+                  <SelectTrigger className="w-full" data-testid="platform-select-trigger">
                     <SelectValue placeholder="Select platform" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent data-testid="platform-options">
                     {AVAILABLE_CHANNELS.map(({ name, value }) => {
                       return (
                         <SelectItem
+                          data-testid="platform-option"
                           key={value}
                           value={value}
                           className="cursor-pointer hover:bg-gray-100"
@@ -142,15 +143,17 @@ export function AssignTicketDialog({
                     name={`restrictions.${index}`}
                     render={({ field }) => (
                       <Select
+                        data-testid="language-select"
                         value={field.value}
                         onValueChange={field.onChange}
                       >
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full" data-testid="language-select-trigger">
                           <SelectValue placeholder="Select language" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent data-testid="language-options">
                           {availableLanguages.map((lang) => (
                             <SelectItem
+                              data-testid="language-option"
                               className="cursor-pointer hover:bg-gray-100"
                               key={lang}
                               value={lang}
@@ -198,7 +201,7 @@ export function AssignTicketDialog({
             >
               {t('common.cancel')}
             </Button>
-            <Button className="cursor-pointer" type="submit">
+            <Button className="cursor-pointer" type="submit" data-testid="submit-button">
               {t('common.submit')}
             </Button>
           </DialogFooter>
