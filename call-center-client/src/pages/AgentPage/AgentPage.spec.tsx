@@ -9,7 +9,9 @@ test.describe('AgentsPage', () => {
   });
 
   test('should load agent data and displays assigned tasks', async ({ page }) => {
+    await page.waitForSelector('h2:has-text("Tasks assigned")', { timeout: 10000 });
     await expect(page.locator('h2')).toContainText('Tasks assigned');
+    
     const taskButton = page.locator('button:has-text("Task ID:")');
     if (await taskButton.count()) {
       await expect(taskButton.first()).toBeVisible();
