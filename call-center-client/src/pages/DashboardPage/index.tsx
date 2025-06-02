@@ -14,7 +14,8 @@ import {
   useCompletedTasks,
   useLog,
 } from '@/hooks';
-import type { RegisterAgentPayload, AssignTicket } from '@/models';
+import type { RegisterAgentPayload } from '@/models';
+import type { AssignTicketFormValues } from '@/schemas/ticketSchema';
 import {
   getAgentCallTasks,
   getAgentTextTasks,
@@ -81,7 +82,7 @@ export default function DashboardPage(): ReactNode {
     });
   };
 
-  const handleAssignNewTicket = (data: AssignTicket) => {
+  const handleAssignNewTicket = (data: AssignTicketFormValues) => {
     assignTicket(data, {
       onSuccess: () => {
         refetchAgents();

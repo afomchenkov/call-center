@@ -10,7 +10,7 @@ import {
   parseLanguageRestrictions,
 } from '@/utils';
 import { AssignTicketDialog } from '@/components/AssignTicketDialog';
-import type { AssignTicket } from '@/models';
+import type { AssignTicketFormValues } from '@/schemas/ticketSchema';
 
 /**
  * - Segregate task list by type: voice and text
@@ -20,7 +20,7 @@ import type { AssignTicket } from '@/models';
 
 type TasksViewProps = {
   tickets: QueuedTicket[];
-  onAssignNewTicket: (data: AssignTicket) => void;
+  onAssignNewTicket: (data: AssignTicketFormValues) => void;
 };
 
 export function TicketsView(props: TasksViewProps): ReactNode {
@@ -32,7 +32,7 @@ export function TicketsView(props: TasksViewProps): ReactNode {
 
   const filtered = tickets.filter((t) => filter === 'all' || t.type === filter);
 
-  const handleAssignTicketSubmit = (assignTicketData: AssignTicket) => {
+  const handleAssignTicketSubmit = (assignTicketData: AssignTicketFormValues) => {
     if (onAssignNewTicket) {
       onAssignNewTicket(assignTicketData);
     }
