@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [master]
     paths:
-      - "call-center-client/**"
+      - "call-center-client/**" # run the job for UI app only
 
 jobs:
   test-client:
