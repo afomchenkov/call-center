@@ -5,11 +5,17 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+    paths:
+      - "call-center-client/**"
 
 jobs:
-  test:
+  test-e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: call-center-client
+        
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
