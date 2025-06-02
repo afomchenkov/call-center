@@ -68,6 +68,9 @@ def register_agent(agent_request: AgentRequest):
             detail=f"Agent with name '{agent.name}' already exists"
         )
     
+    # try to match a new agent for queued tickets
+    service.process_queued_tickets()
+
     # Convert to response format
     return AgentResponse(
         id=agent.id,

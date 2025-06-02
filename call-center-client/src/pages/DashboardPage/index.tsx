@@ -72,6 +72,7 @@ export default function DashboardPage(): ReactNode {
     registerAgent(data, {
       onSuccess: () => {
         refetchAgents();
+        refetchQueue();
       },
       onError: (err) => {
         toast.error('Failed to create a new agent', {
