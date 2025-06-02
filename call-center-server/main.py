@@ -330,6 +330,7 @@ def get_debug_info():
 def reset_service():
     """Reset the service state (for testing)"""
     service.agents = {}
+    service.agent_names = {}
     service.ticket_queue = TicketQueue()
     service.completed_tasks = set()
     service.assigned_ticket_ids = set()
