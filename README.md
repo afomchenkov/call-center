@@ -12,15 +12,6 @@
 - Responsive layout
 ```
 
-## To be added
-
-```text
-- The e2e and unit tests
-- Auto agent reassignment
-- Agent patch request to edit the agent data
-- Fix BE auto reassignment when new agent is available
-```
-
 ## Start the app
 
 > Make sure you have Node v20.* or above
