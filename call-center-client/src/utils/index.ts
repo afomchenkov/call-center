@@ -4,7 +4,9 @@ import { AgentModel, QueueModel, QueueItemModel } from '@/models';
 import { TaskPlatform } from '@/types';
 import type { QueuedTicket } from '@/types';
 
+// Total tasks capacity for an agent that can be handled at the same time
 const TOTAL_TASKS_CAPACITY = 4;
+// Total tasks capacity for an agent if there is one voice task
 const REDUCED_TOTAL_TASKS_CAPCITY = 3;
 
 /**
