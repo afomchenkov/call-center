@@ -91,7 +91,7 @@ export function TicketsView(props: TasksViewProps): ReactNode {
       </div>
 
       <div className="max-h-64 overflow-y-auto">
-        <ul className="divide-y divide-gray-200">
+        <ul className="divide-y divide-gray-200" data-testid="queued-tickets">
           {filtered.length === 0 ? (
             <p className="text-sm text-gray-500">
               {t('ticketsQueue.noTickets')}

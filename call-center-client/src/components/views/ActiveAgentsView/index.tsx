@@ -30,7 +30,7 @@ export function ActiveAgentsView(props: ActiveAgentsViewProps): ReactNode {
   const { t } = useTranslation();
 
   return (
-    <section className="h-full flex flex-col">
+    <section className="h-full flex flex-col" data-testid="active-agents-view">
       <div className="flex items-center mb-4">
         <h2 className="text-xl font-semibold">{t('activeAgents.title')}</h2>
         <UsersIcon className="w-4 h-4 ml-2" />
@@ -43,6 +43,7 @@ export function ActiveAgentsView(props: ActiveAgentsViewProps): ReactNode {
           {agents.map((agent) => (
             <div
               key={agent.id}
+              data-testid={`data-agent-id`}
               className="flex items-center justify-between p-4 border shadow-sm"
             >
               <div className="flex items-center gap-3">
