@@ -1,0 +1,51 @@
+name: CI/CD Deploy
+
+on:
+  push:
+    branches: [release]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-central-1
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}  # OIDC for security
+      - uses: hashicorp/setup-terraform@v2
+      - run: terraform init
+      - run: terraform validate
+      - run: terraform plan -out=plan.tfplan
+      - run: terraform apply -auto-approve plan.tfplan
+
+  build-push-image:
+    needs: terraform
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-central-1
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+      - run: |
+          aws ecr get-login-password \
+            | docker login --username AWS \
+                --password-stdin ${{ secrets.ECR_URI }}
+          docker build -t call-center:latest .
+          docker tag call-center:latest ${{ secrets.ECR_URI }}:latest
+          docker push ${{ secrets.ECR_URI }}:latest
+
+  deploy-to-ec2:
+    needs: build-push-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-central-1
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+      - name: Trigger redeploy via SSM
+        run: aws ssm send-command \
+          --instance-ids $(terraform output -json app_instance_ids | jq -r '.[]') \
+          --document-name "AWS-RunShellScript" \
+          --parameters commands=["docker pull ${{ secrets.ECR_URI }}:latest","docker stop \$(docker ps -q --filter ancestor=call-center)","docker run -d -p 80:3000 --env DATABASE_URL=postgres://${var.db_user}:${var.db_pass}@$(terraform output -raw postgres_address):5432/${var.db_name} call-center:latest"]
