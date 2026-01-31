@@ -1,4 +1,5 @@
 from typing import List
+import os
 from fastapi import FastAPI, APIRouter, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from domain.task import Task
@@ -6,6 +7,9 @@ from domain.ticket import Ticket
 from domain.agent import Agent
 from services.ticket_assignment_service import TicketAssignmentService
 from utils.ticket_queue import TicketQueue
+from services.dynamodb_state_store import DynamoDBStateStore
+from services.dynamodb_event_store import DynamoDBEventStore
+# from services.kafka_event_consumer import KafkaEventConsumer
 from models.health import HealthCheck
 from models.agent import AgentResponse, AgentRequest, AgentUpdateRequest
 from models.assignment import AssignmentResponse
@@ -41,7 +45,40 @@ app.add_middleware(
 )
 
 
-service = TicketAssignmentService()
+state_store = DynamoDBStateStore.from_env()
+event_store = DynamoDBEventStore.from_env()
+service = TicketAssignmentService(state_store=state_store)
+kafka_consumer = None
+
+
+def handle_kafka_event(event: dict, topic: str) -> None:
+    if not event_store:
+        return
+    event_store.write_event(event, topic=topic)
+    event_store.write_audit(event, source="kafka")
+
+
+# @app.on_event("startup")
+# def start_kafka_consumer() -> None:
+#     global kafka_consumer
+#     brokers = os.getenv("KAFKA_BROKERS")
+#     if not brokers or not event_store:
+#         return
+#     topic = os.getenv("KAFKA_TOPIC", "call-center-events")
+#     group_id = os.getenv("KAFKA_GROUP_ID", "call-center-service")
+#     kafka_consumer = KafkaEventConsumer(
+#         brokers=brokers,
+#         topic=topic,
+#         group_id=group_id,
+#         handler=handle_kafka_event,
+#     )
+#     kafka_consumer.start()
+
+
+# @app.on_event("shutdown")
+# def stop_kafka_consumer() -> None:
+#     if kafka_consumer:
+#         kafka_consumer.stop()
 
 @api_v1.get(
     "/health",
@@ -183,6 +220,7 @@ def assign_ticket(ticket_request: TicketRequest):
                 best_agent.assigned_tasks.append(task)
                 # Mark ticket as assigned
                 service.assigned_ticket_ids.add(ticket.id)
+                # service.record_assignment(ticket, task)
                 
                 return AssignmentResponse(
                     ticket_id=ticket.id,
@@ -194,6 +232,7 @@ def assign_ticket(ticket_request: TicketRequest):
             else:
                 # Put it back in the queue
                 service.ticket_queue.add_ticket(ticket)
+                # service.save_state()
                 
                 return AssignmentResponse(
                     ticket_id=ticket.id,
@@ -212,6 +251,7 @@ def assign_ticket(ticket_request: TicketRequest):
             queued=False
         )
     else:
+        # service.save_state()
         return AssignmentResponse(
             ticket_id=ticket.id,
             queued=True
@@ -329,6 +369,7 @@ def get_debug_info():
 @api_v1.post("/reset")
 def reset_service():
     """Reset the service state (for testing)"""
+    # service.reset()
     service.agents = {}
     service.agent_names = {}
     service.ticket_queue = TicketQueue()
@@ -371,6 +412,7 @@ def update_agent(agent_identifier: str, update_request: AgentUpdateRequest, by_n
             skill for skill in agent.language_skills 
             if skill not in update_request.remove_skills
         ]
+    # service.save_state()
     
     # Return updated agent
     return AgentResponse(
@@ -482,6 +524,7 @@ def assign_manual_task(
     # Create and assign the task
     task = Task(platform)
     agent.assigned_tasks.append(task)
+    # service.save_state()
     
     return AgentResponse(
         id=agent.id,

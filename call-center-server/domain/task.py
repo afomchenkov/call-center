@@ -15,6 +15,12 @@ class TaskPlatform:
     def is_voice(platform: str) -> bool:
         return platform == TaskPlatform.CALL
 
+# class Task:
+#     def __init__(self, platform: str, id: str | None = None):
+#         self.id = id if id else str(uuid.uuid4())
+#         self.platform = platform
+#         self.is_voice = TaskPlatform.is_voice(platform)
+
 class Task:
     def __init__(self, platform: str):
         self.id = str(uuid.uuid4())  # Generate unique ID for each task
